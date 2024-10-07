@@ -8,7 +8,7 @@ import time
 class DeadScan:
     def __init__(self):
         """
-            Constructor Function to Initialise variables.
+            Constructor Function to Initialize variables.
         """
         self.openports = []
         self.thrds = []
@@ -40,7 +40,7 @@ class DeadScan:
             th = Thread(target=self.scanone, args=(port,)) # Creating Thread.
             self.thrds.append(th) # Appending Threads In a List.
             th.start() # Starting Thread.
-            if len(self.thrds) >= self.threads: # Insuring a Limit For Concurrent Threads.
+            if len(self.thrds) >= self.threads: # Ensuring a Limit For Concurrent Threads.
                 for th in self.thrds:
                     th.join()
                 self.thrds = []
@@ -114,7 +114,7 @@ if __name__=="__main__":
         if obj.Time:
             stime = time.time()
             print("*"*70)
-            print(f"Started Scaning Port From {obj.start} - {obj.end} on IP {obj.ip}")
+            print(f"Started Scanning Port From {obj.start} - {obj.end} on IP {obj.ip}")
             obj.scanloop()
             print(f"\nList of Ports = {sorted(obj.openports)}")
             etime = time.time()
@@ -122,7 +122,7 @@ if __name__=="__main__":
             print("*"*70)
         else:
             print("*"*70)
-            print(f"Started Scaning Port From {obj.start} - {obj.end} on IP {obj.ip}")
+            print(f"Started Scanning Port From {obj.start} - {obj.end} on IP {obj.ip}")
             obj.scanloop()
             print(f"\nList of Ports = {sorted(obj.openports)}")
             print("*"*70)

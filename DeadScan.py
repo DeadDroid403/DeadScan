@@ -12,7 +12,6 @@ class DeadScan:
         """
         self.openports = []
         self.thrds = []
-        self.error = 999
 
     def scanone(self,port):
         """
@@ -29,7 +28,7 @@ class DeadScan:
                self.openports.append(port)
             s.close() # Closing the Socket.
         except Exception as e:
-            print(e) # Simply Ignoring The Exceptions.
+            pass # Simply Ignoring The Exceptions.
        
     def scanloop(self):
         """

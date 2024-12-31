@@ -39,5 +39,4 @@ pip install socket threading argparse
 
 The **DeadScan Tool** is efficiant way to scan port on a host.
 
-Feel free to contribute or suggest improvements by opening an issue or submitting a pull request. Enjoy exploring colleges with this tool!
-
+Feel free to contribute or suggest improvements by opening an issue or submitting a pull request. Enjoy Using it...

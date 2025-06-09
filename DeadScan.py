@@ -11,11 +11,12 @@ class DeadScan:
             Constructor Function to Initialize variables.
         """
         self.openports = []
+        self.open_udp_port_filtered = []
         self.thrds = []
 
     def scanone(self,port):
         """
-            Function To Scan 1 Port, We'll Call This Func To Scan Port Concurrently.
+            Function To Scan 1 TCP Port, We'll Call This Func To Scan Ports Concurrently.
         """
         try:
             s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) # Creating a Socket 
@@ -24,19 +25,46 @@ class DeadScan:
             result = s.connect_ex((self.ip,port))
             # Checking if Port is open or close.
             if result == 0:
-               print(f"Connected To Port {port}")
+               print(f"[+] Port {port} is OPEN (got response) ")
                self.openports.append(port)
             s.close() # Closing the Socket.
         except Exception as e:
             pass # Simply Ignoring The Exceptions.
-       
+    
+    def scanoneudp(self,port):
+        """
+            Function to Scan 1 UDP Port, We'll Call This Func to Scan UDP Ports Concurrently.
+        """
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Creating a Socket 
+            s.settimeout(3)
+            # Trying To Connect To a UDP Port and Wait for Response.
+            s.connect((self.ip,port))
+            s.send(b"") # Sending Empty Payload to UDP. 
+            data = s.recv(1024)  # if we recieve data then the port is open. 
+            print(f"[+] Port {port} is OPEN (got response)")
+            self.openports.append(port)
+        except socket.timeout: # if timeouts then port is probably open or filtered. 
+            self.open_udp_port_filtered.append(port)
+        except Exception as e: # For every other Exception, we are declaring port as closed. like ICMP error...
+            pass
+        finally:
+            s.close() # Finally closing the connection.
+
     def scanloop(self):
         """
             Function To Create Multiple Threads and Call Scanone Func Concurrently.
         """
         # Loop To Scan All Ports Given By User.
+        if self.port_type == "T":
+            scanning_port = self.scanone
+        elif self.port_type == "U":
+            scanning_port = self.scanoneudp
+        else:
+            print(f"[-] The -p flag only supports T or U for TCP or UDP respectively")
+            sys.exit(1)
         for port in range (self.start, (self.end + 1)):
-            th = Thread(target=self.scanone, args=(port,)) # Creating Thread.
+            th = Thread(target=scanning_port, args=(port,)) # Creating Thread.
             self.thrds.append(th) # Appending Threads In a List.
             th.start() # Starting Thread.
             if len(self.thrds) >= self.threads: # Ensuring a Limit For Concurrent Threads.
@@ -84,6 +112,11 @@ class DeadScan:
                                  help="Display Time Taken In The Scanning",
                                  dest="Time",
                                  action="store_true")
+        self.parser.add_argument("-p","--port-type",
+                                 help="Type of Port Scan T / U for TCP or UDP [def = T]",
+                                 dest="port_type",
+                                 metavar='',
+                                 default="T")
         self.args = self.parser.parse_args() # Parsing All Args.
 
     def argscheck(self):
@@ -100,6 +133,7 @@ class DeadScan:
                 self.end = self.args.ep
                 self.threads = self.args.threads
                 self.Time = self.args.Time
+                self.port_type = self.args.port_type
             else:
                 self.parser.print_help()
                 sys.exit(1)
@@ -115,7 +149,13 @@ if __name__=="__main__":
             print("*"*70)
             print(f"Started Scanning Port From {obj.start} - {obj.end} on IP {obj.ip}")
             obj.scanloop()
-            print(f"\nList of Ports = {sorted(obj.openports)}")
+            if obj.open_udp_port_filtered:
+                if len(obj.open_udp_port_filtered) > 50:
+                    print(f"\nList of Filterded Ports is too big...")
+                else:
+                    print(f"\nList of Filterded Ports = {sorted(obj.open_udp_port_filtered)}")
+            if obj.openports:
+                print(f"\nList of Ports = {sorted(obj.openports)}")
             etime = time.time()
             print(f"\nTime Taken in This Scan is {etime - stime} Seconds")
             print("*"*70)
@@ -123,7 +163,13 @@ if __name__=="__main__":
             print("*"*70)
             print(f"Started Scanning Port From {obj.start} - {obj.end} on IP {obj.ip}")
             obj.scanloop()
-            print(f"\nList of Ports = {sorted(obj.openports)}")
+            if obj.open_udp_port_filtered:
+                if len(obj.open_udp_port_filtered) > 50:
+                    print(f"\nList of Filterded Ports is too big...")
+                else:
+                    print(f"\nList of Filterded Ports = {sorted(obj.open_udp_port_filtered)}")
+            if obj.openports:
+                print(f"\nList of Ports = {sorted(obj.openports)}")
             print("*"*70)
     else:
         obj.parser.print_help()

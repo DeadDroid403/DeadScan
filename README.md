@@ -1,12 +1,13 @@
 # DeadScan
 
 ## Overview
-**DeadScan** is a fast, multi-threaded port scanning tool written in Python. This script allows you to scan for open ports on a target IP address, specify the range of ports to scan, and control the number of concurrent threads to speed up the process.
+**DeadScan** is a fast, multi-threaded and riliable port scanning tool written in Python. This Tool allows you to scan for open ports on a target IP address or domain, specify the range of ports to scan, and control the number of concurrent threads to speed up the process, Scan TCP or UDP, Runs riliability scans in background, etc.
 
 ## Features
 - Fast, multi-threaded scanning using Python's threading module.
+- Options to Scan UDP or TCP Ports.
+- run riliability scans in background for accurate results.
 - Customizable port ranges.
-- Control the number of threads.
 - Option to display the time taken to complete the scan.
 - Simple and lightweight, with minimal dependencies.
 
@@ -16,10 +17,11 @@
   - `socket`
   - `threading`
   - `argparse`
+  - `rich`
 
 You can install the necessary packages using pip:
 ```sh
-pip install socket threading argparse
+pip install socket threading argparse rich
 ```
 
 ## Usage

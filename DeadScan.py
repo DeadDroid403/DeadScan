@@ -5,7 +5,6 @@ import sys
 from threading import Thread
 import time
 from rich.console import Console
-import time
 import random 
 
 class Decoration:
@@ -18,8 +17,10 @@ class Decoration:
         self.console = Console()
         self.color = ["#FF0000","#FF7F00","#FFFF00","#00FF00","#00FFFF","#0000FF","#8B00FF","#FF1493","#FFD700","#00FF7F","#1E90FF","#FF4500"]
 
-
     def runRocket(self):
+        """
+            Decoration Function to Run a Rocket animation
+        """
         rocket_length = 66
         color = str(random.choice(self.color))
         for i in range(rocket_length):
@@ -33,6 +34,9 @@ class Decoration:
                 self.console.print(" "*i + rocket_design)
 
     def runLine2(self):
+        """
+            Decoration Function to print a multi color line
+        """
         line_length = 70
         color = str(random.choice(self.color))
         for i in range(line_length):
@@ -43,14 +47,19 @@ class Decoration:
             else:   
                 self.console.print(line_char )
 
-
     def runLine(self):
+        """
+            Decoration Function to print a single color line
+        """
         line_length = 70
         color = "#FF4500"
         self.console.print(f'[bold {color}]{"-"*line_length}[/bold {color}]')
 
 
     def logo(self):
+        """
+            this function is used to print the Logo.
+        """
         print("""
 ██████╗ ███████╗ █████╗ ██████╗     ███████╗ ██████╗ █████╗ ███╗   ██╗
 ██╔══██╗██╔════╝██╔══██╗██╔══██╗    ██╔════╝██╔════╝██╔══██╗████╗  ██║
@@ -64,7 +73,6 @@ Version:    1.3
             """)
 
 
-
 class DeadScan(Decoration):
     def __init__(self):
         """
@@ -76,7 +84,6 @@ class DeadScan(Decoration):
         self.allow_print = 1
         self.thrds = []
         self.logo()
-
 
     def scanone(self,port):
         """

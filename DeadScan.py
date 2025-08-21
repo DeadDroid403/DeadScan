@@ -221,9 +221,9 @@ class DeadScan(Decoration):
             else:
                 self.console.print('[bold #FF0000 ]Error: Target not specified. Please provide an IP address or domain. Use -h for usage details.[/bold #FF0000 ]')
                 sys.exit(1)
-            if self.port_type !='T':
+            if self.port_type =='U':
                 self.scan_type = 'UDP Scan'
-            elif self.port_type != 'U':
+            elif self.port_type == 'T':
                 self.scan_type = "TCP Scan"
             else:
                 self.console.print(f"[bold #FF0000 ]Error: Invalid protocol. The -p flag supports only 'T' (TCP) or 'U' (UDP).[/bold #FF0000 ]")

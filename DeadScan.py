@@ -91,7 +91,7 @@ class DeadScan(Decoration):
         """
         try:
             s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) # Creating a Socket 
-            s.settimeout(0.5)
+            s.settimeout(1.5)
             # Trying To Connect To a Port and Saving Result.
             result = s.connect_ex((self.ip,port))
             # Checking if Port is open or close.
